@@ -4,12 +4,13 @@ Training a fastText model on the SLED categorization dataset.
 
 ## Main conclusions
 
-
+The fastText model, trained on Slovene embeddings achieved slightly (2 points) better results than the model that was not trained on the embeddings. The highest micro and macro F1 scores that were achieved on this task are 0.85.
 
 | Embeddings | Micro F1 | Macro F1 |
 |:---------:|---------:|----------|
-|    no      |    0.8285      |    0.8282      |
-|    yes      |          |          |
+|    yes      |  0.85     |  0.85   |
+|    no      |    0.83      |    0.83      |
+
 
 The hyperparameter search, focused on the number of epochs, revealed optimum numbers to be quite high - 800 epochs for the model without the embeddings, and 400 epochs for the model with the embeddings. Other hyperparameters were set to default values.
 
@@ -48,5 +49,8 @@ As we can see from the plot, the micro and macro F1 scores keep rising until the
 | Tested on | Micro F1 | Macro F1 |
 |:---------:|---------:|----------|
 |    dev    |   0.8461       |   0.8457       |
-|    test      |       |    |
+|    test      |  0.8492     |  0.8487  |
 
+Confusion matrix for the test file:
+
+![](results/confusion-matrix-on-test-with-embeddings.png)
