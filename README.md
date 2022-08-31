@@ -30,9 +30,29 @@ As we can see from the plot, the micro and macro F1 scores keep rising until the
 |    dev    |   0.8346       |   0.8348       |
 |    test      |    0.8285      |    0.8282      |
 
+Classification report:
+
+![](results/classification-report.png)
+
 Confusion matrix for test file:
 
 ![](results/confusion-matrix-on-test.png)
+
+The model is saved to the Wandb - to load it:
+```
+!pip install wandb
+import wandb
+wandb.login()
+
+# Initialize Wandb
+run = wandb.init(pproject="SLED-categorization", entity="tajak", name="testing-trained-model")
+
+# Load the saved model
+artifact = run.use_artifact('tajak/SLED-categorization/SLED-categorization-trainsmall-noembeddings-model:v0', type='model')
+artifact_dir = artifact.download()
+
+model = fasttext.load_model(f"{artifact_dir}/FastText-model-trainsmall-noembeddings.bin")
+```
 
 
 ## FastText model with the embeddings
@@ -51,6 +71,26 @@ As we can see from the plot, the micro and macro F1 scores keep rising until the
 |    dev    |   0.8461       |   0.8457       |
 |    test      |  0.8492     |  0.8487  |
 
+Classification report:
+
+![](results/classification-report-with-embeddings.png)
+
 Confusion matrix for the test file:
 
 ![](results/confusion-matrix-on-test-with-embeddings.png)
+
+The model is saved to the Wandb - to load it:
+```
+!pip install wandb
+import wandb
+wandb.login()
+
+# Initialize Wandb
+run = wandb.init(pproject="SLED-categorization", entity="tajak", name="testing-trained-model")
+
+# Load the saved model
+artifact = run.use_artifact('tajak/SLED-categorization/SLED-categorization-trainsmall-embeddings-model:v0', type='model')
+artifact_dir = artifact.download()
+
+model = fasttext.load_model(f"{artifact_dir}/FastText-model-trainsmall-embeddings.bin")
+```
