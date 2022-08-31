@@ -45,7 +45,7 @@ import wandb
 wandb.login()
 
 # Initialize Wandb
-run = wandb.init(pproject="SLED-categorization", entity="tajak", name="testing-trained-model")
+run = wandb.init(project="SLED-categorization", entity="tajak", name="testing-trained-model")
 
 # Load the saved model
 artifact = run.use_artifact('tajak/SLED-categorization/SLED-categorization-trainsmall-noembeddings-model:v0', type='model')
@@ -86,7 +86,7 @@ import wandb
 wandb.login()
 
 # Initialize Wandb
-run = wandb.init(pproject="SLED-categorization", entity="tajak", name="testing-trained-model")
+run = wandb.init(project="SLED-categorization", entity="tajak", name="testing-trained-model")
 
 # Load the saved model
 artifact = run.use_artifact('tajak/SLED-categorization/SLED-categorization-trainsmall-embeddings-model:v0', type='model')
