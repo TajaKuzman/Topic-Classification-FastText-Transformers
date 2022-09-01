@@ -10,16 +10,15 @@ The fastText model, trained on Slovene embeddings achieved slightly (2 points) b
 |:---------:|---------:|----------|
 |    yes, trainsmall      |  0.85     |  0.85   |
 |    yes, trainlarge      |       |    |
-|    no, trainlarge      |          |          |
+|    no, trainlarge      |   0.85       |   0.85      |
 |    no, trainsmall      |    0.83      |    0.83      |
 
+Training on the trainlarge gives only slightly better results (2 points), while it takes much more time than with trainsmall (53 minutes versus 14 minutes for 800 epochs).
 
-The hyperparameter search, focused on the number of epochs, revealed optimum numbers to be quite high - 800 epochs for the model without the embeddings, and 400 epochs for the model with the embeddings. Other hyperparameters were set to default values.
+The hyperparameter search, focused on the number of epochs, revealed optimum numbers to be quite high - 800 epochs for the model without the embeddings, and 400 epochs for the model with the embeddings. Other hyperparameters were set to default values. When training on the trainlarge, the optimal number of epochs was even bigger: 900 for the model without the embeddings, 1000 for the model with embeddings.
 
 
 ## FastText model without the embeddings (trainsmall)
-
-### Hyperparameter search
 
 During the hyperparameter search, I only experimented with different numbers of epochs. I did not use the automatic hyperparameter search, but did the experiments "manually", by training the models on the train split, with different numbers of epochs each time, and evaluating them on the dev split.
 
@@ -39,22 +38,6 @@ Classification report:
 Confusion matrix for test file:
 
 ![](results/confusion-matrix-on-test.png)
-
-The model is saved to the Wandb - to load it:
-```
-!pip install wandb
-import wandb
-wandb.login()
-
-# Initialize Wandb
-run = wandb.init(project="SLED-categorization", entity="tajak", name="testing-trained-model")
-
-# Load the saved model
-artifact = run.use_artifact('tajak/SLED-categorization/SLED-categorization-trainsmall-noembeddings-model:v0', type='model')
-artifact_dir = artifact.download()
-
-model = fasttext.load_model(f"{artifact_dir}/FastText-model-trainsmall-noembeddings.bin")
-```
 
 
 ## FastText model with the embeddings (trainsmall)
@@ -81,6 +64,61 @@ Confusion matrix for the test file:
 
 ![](results/confusion-matrix-on-test-with-embeddings.png)
 
+
+## FastText model without the embeddings (trainlarge)
+
+### Hyperparameter search
+
+Similarly to the model, trained on trainsmall train split, the optimum number of epochs revealed to be quite large - the scores stop rising at 900 epochs -> I used 900 epochs as the optimum value.
+
+![](results/hyperparameter-search-epoch-number-trainlarge.png)
+
+| Tested on | Micro F1 | Macro F1 |
+|:---------:|---------:|----------|
+|    dev    |   0.860       |   0.861       |
+|    test      |   0.8515       |   0.8533      |
+
+Classification report:
+
+![](results/classification-report-trainlarge.png)
+
+Confusion matrix:
+
+![](results/confusion-matrix-on-test-trainlarge.png)
+
+## FastText model with embeddings (trainlarge)
+
+While the optimal number of epochs for trainsmall with embeddings was 400 epochs, the hyperparameter showed that when training on trainlarge, the optimal number is much higher - even after 1000, the scores kept rising (although slowly). As training on 1000 epochs takes more than 100 minutes, I stoped searching for the optimum epoch number after 1000 epochs and used this number for testing.
+
+![](results/hyperparameter-search-trainlarge-with-embeddings-epoch-number.png)
+
+| Tested on | Micro F1 | Macro F1 |
+|:---------:|---------:|----------|
+|    dev    |   0.860       |   0.8603       |
+|    test      |          |         |
+
+## Saved models
+
+### Trainsmall, no embeddings
+
+The model is saved to the Wandb - to load it:
+```
+!pip install wandb
+import wandb
+wandb.login()
+
+# Initialize Wandb
+run = wandb.init(project="SLED-categorization", entity="tajak", name="testing-trained-model")
+
+# Load the saved model
+artifact = run.use_artifact('tajak/SLED-categorization/SLED-categorization-trainsmall-noembeddings-model:v0', type='model')
+artifact_dir = artifact.download()
+
+model = fasttext.load_model(f"{artifact_dir}/FastText-model-trainsmall-noembeddings.bin")
+```
+
+### Trainsmall, embeddings
+
 The model is saved to the Wandb - to load it:
 ```
 !pip install wandb
@@ -97,17 +135,38 @@ artifact_dir = artifact.download()
 model = fasttext.load_model(f"{artifact_dir}/FastText-model-trainsmall-embeddings.bin")
 ```
 
-## FastText model without the embeddings (trainlarge)
+### Trainlarge, no embeddings
 
-### Hyperparameter search
+The model is saved to the Wandb - to load it:
+```
+!pip install wandb
+import wandb
+wandb.login()
 
-Similarly to the model, trained on trainsmall train split, the optimum number of epochs revealed to be quite large - the scores stop rising at 900 epochs -> I used 900 epochs as the optimum value.
+# Initialize Wandb
+run = wandb.init(project="SLED-categorization", entity="tajak", name="testing-trained-model")
 
-![](results/hyperparameter-search-epoch-number-trainlarge.png)
+# Load the saved model
+artifact = run.use_artifact('tajak/SLED-categorization/SLED-categorization-trainlarge-noembeddings-model:v0', type='model')
+artifact_dir = artifact.download()
 
-| Tested on | Micro F1 | Macro F1 |
-|:---------:|---------:|----------|
-|    dev    |   0.860       |   0.861       |
-|    test      |          |         |
+model = fasttext.load_model(f"{artifact_dir}/FastText-model-trainlarge-noembeddings.bin")
+```
 
-Training the model with trainlarge took much more time than with trainsmall (53 minutes versus 14 minutes for 800 epochs).
+### Trainlarge, embeddings
+
+The model is saved to the Wandb - to load it:
+```
+!pip install wandb
+import wandb
+wandb.login()
+
+# Initialize Wandb
+run = wandb.init(project="SLED-categorization", entity="tajak", name="testing-trained-model")
+
+# Load the saved model
+artifact = run.use_artifact('tajak/SLED-categorization/SLED-categorization-trainsmall-embeddings-model:v0', type='model')
+artifact_dir = artifact.download()
+
+model = fasttext.load_model(f"{artifact_dir}/FastText-model-trainsmall-embeddings.bin")
+```
