@@ -4,7 +4,7 @@ Training a fastText model on the SLED categorization dataset.
 
 ## Main conclusions
 
-The fastText model, trained on Slovene embeddings achieved slightly (2 points) better results than the model that was not trained on the embeddings. The highest micro and macro F1 scores that were achieved on this task are 0.85.
+The fastText model, trained on Slovene embeddings achieved slightly (2 points) better results than the model that was not trained on the embeddings. The highest micro and macro F1 scores that were achieved on this task are 0.85. Training on the trainlarge gives only slightly better results (2 points) for the model that was not trained with embeddings, while it takes much more time than with trainsmall (53 minutes versus 14 minutes for 800 epochs). For the model, trained on the embeddings, there is no difference between the trainsmall and trainlarge.
 
 | Embeddings, train file | Micro F1 | Macro F1 |
 |:---------:|---------:|----------|
@@ -13,7 +13,6 @@ The fastText model, trained on Slovene embeddings achieved slightly (2 points) b
 |    no, trainlarge      |   0.85       |   0.85      |
 |    no, trainsmall      |    0.83      |    0.83      |
 
-Training on the trainlarge gives only slightly better results (2 points) for the model that was not trained with embeddings, while it takes much more time than with trainsmall (53 minutes versus 14 minutes for 800 epochs). For the model, trained on the embeddings, there is no difference between the trainsmall and trainlarge.
 
 The hyperparameter search, focused on the number of epochs, revealed optimum numbers to be quite high - 800 epochs for the model without the embeddings, and 400 epochs for the model with the embeddings. Other hyperparameters were set to default values. When training on the trainlarge, the optimal number of epochs was even bigger: 900 for the model without the embeddings, 1000 for the model with embeddings.
 
