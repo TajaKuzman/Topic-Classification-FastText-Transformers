@@ -4,3 +4,6 @@ data/sled_categorization_DEV_PREPROCESSED.txt
 data/sled_categorization_TEST_PREPROCESSED.txt
 data/sled_categorization_TRAINSMALL_PREPROCESSED.txt
 data/sled_categorization_TRAINLARGE_PREPROCESSED.txt
+data/SLED-for-Transformers-dev.csv
+data/SLED-for-Transformers-test.csv
+data/SLED-for-Transformers-train.csv

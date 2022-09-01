@@ -1,8 +1,55 @@
-# FastText-Classification-on-SLED
- 
-Training a fastText model on the SLED categorization dataset.
+# Topic classification on SLED
 
-## Main conclusions
+Content:
+- [Data](#data)
+- [Training Transformer models](#training-transformer-models)
+- [Training fastText models](#training-fasttext-models)
+
+## Data
+
+For training FastText models, I experimented with both trainsmall and trainlarge (36,032 instances), while for Transformer models, I used the trainsmall train split. The dataset (with the trainsmall) has 12,603 instances, annotated with 13 labels: ['crnakronika', 'druzba', 'gospodarstvo', 'izobrazevanje', 'kultura', 'okolje', 'politika', 'prosticas', 'sport', 'vreme', 'zabava', 'zdravje', 'znanost']. The dataset is more or less balanced.
+
+Analysis revealed that there are 18 duplicated texts (some even in different splits) -> they were discarded. The final dataset that we used consists of 12,585 instances.
+
+|               |   label |
+|:--------------|--------:|
+| crnakronika   |    1000 |
+| druzba        |    1000 |
+| gospodarstvo  |    1000 |
+| politika      |    1000 |
+| sport         |    1000 |
+| zabava        |    1000 |
+| zdravje       |     999 |
+| kultura       |     998 |
+| znanost       |     951 |
+| vreme         |     926 |
+| prosticas     |     912 |
+| okolje        |     904 |
+| izobrazevanje |     895 |
+
+|  split     |   number of texts |
+|:------|--------:|
+| trainsmall |    9990 |
+| test  |    1299 |
+| dev   |    1296 |
+
+Most of the texts are short - using 512 as max_seq_length will capture most of the texts to their entirety:
+
+|       |    length |
+|:------|----------:|
+| mean  |   242.994 |
+| std   |   109.83  |
+| min   |    97     |
+| 25%   |   143     |
+| 50%   |   217     |
+| 75%   |   313     |
+| max   |  1382     |
+
+## Training Transformer models
+
+
+
+## Training fastText models
 
 The fastText model, trained on Slovene embeddings achieved slightly (2 points) better results than the model that was not trained on the embeddings. The highest micro and macro F1 scores that were achieved on this task are 0.85. Training on the trainlarge gives only slightly better results (2 points) for the model that was not trained with embeddings, while it takes much more time than with trainsmall (53 minutes versus 14 minutes for 800 epochs). For the model, trained on the embeddings, there is no difference between the trainsmall and trainlarge.
 
@@ -16,8 +63,17 @@ The fastText model, trained on Slovene embeddings achieved slightly (2 points) b
 
 The hyperparameter search, focused on the number of epochs, revealed optimum numbers to be quite high - 800 epochs for the model without the embeddings, and 400 epochs for the model with the embeddings. Other hyperparameters were set to default values. When training on the trainlarge, the optimal number of epochs was even bigger: 900 for the model without the embeddings, 1000 for the model with embeddings.
 
+For more details, see [Details on FastText classification](#details-on-fasttext-classification).
 
-## FastText model without the embeddings (trainsmall)
+## Details on FastText classification
+
+Content:
+- [FastText model without the embeddings (trainsmall)](#fasttext-model-without-the-embeddings-trainsmall)
+- [FastText model with the embeddings (trainsmall)](#fasttext-model-with-the-embeddings-trainsmall)
+- [FastText model without the embeddings (trainlarge)](#fasttext-model-without-the-embeddings-trainlarge)
+- [FastText model with embeddings (trainlarge)](#fasttext-model-with-embeddings-trainlarge)
+
+### FastText model without the embeddings (trainsmall)
 
 During the hyperparameter search, I only experimented with different numbers of epochs. I did not use the automatic hyperparameter search, but did the experiments "manually", by training the models on the train split, with different numbers of epochs each time, and evaluating them on the dev split.
 
@@ -39,7 +95,7 @@ Confusion matrix for test file:
 ![](results/confusion-matrix-on-test.png)
 
 
-## FastText model with the embeddings (trainsmall)
+### FastText model with the embeddings (trainsmall)
 
 I used Slovene embeddings from the CLARIN.SI repository: Word embeddings CLARIN.SI-embed.sl 1.0 (https://www.clarin.si/repository/xmlui/handle/11356/1204).
 
@@ -64,9 +120,7 @@ Confusion matrix for the test file:
 ![](results/confusion-matrix-on-test-with-embeddings.png)
 
 
-## FastText model without the embeddings (trainlarge)
-
-### Hyperparameter search
+### FastText model without the embeddings (trainlarge)
 
 Similarly to the model, trained on trainsmall train split, the optimum number of epochs revealed to be quite large - the scores stop rising at 900 epochs -> I used 900 epochs as the optimum value.
 
@@ -85,7 +139,7 @@ Confusion matrix:
 
 ![](results/confusion-matrix-on-test-trainlarge.png)
 
-## FastText model with embeddings (trainlarge)
+### FastText model with embeddings (trainlarge)
 
 While the optimal number of epochs for trainsmall with embeddings was 400 epochs, the hyperparameter showed that when training on trainlarge, the optimal number is much higher - even after 1000, the scores kept rising (although slowly). As training on 1000 epochs takes more than 100 minutes, I stoped searching for the optimum epoch number after 1000 epochs and used this number for testing.
 
