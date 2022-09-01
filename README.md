@@ -9,11 +9,11 @@ The fastText model, trained on Slovene embeddings achieved slightly (2 points) b
 | Embeddings, train file | Micro F1 | Macro F1 |
 |:---------:|---------:|----------|
 |    yes, trainsmall      |  0.85     |  0.85   |
-|    yes, trainlarge      |       |    |
+|    yes, trainlarge      |  0.85       |   0.85      |
 |    no, trainlarge      |   0.85       |   0.85      |
 |    no, trainsmall      |    0.83      |    0.83      |
 
-Training on the trainlarge gives only slightly better results (2 points), while it takes much more time than with trainsmall (53 minutes versus 14 minutes for 800 epochs).
+Training on the trainlarge gives only slightly better results (2 points) for the model that was not trained with embeddings, while it takes much more time than with trainsmall (53 minutes versus 14 minutes for 800 epochs). For the model, trained on the embeddings, there is no difference between the trainsmall and trainlarge.
 
 The hyperparameter search, focused on the number of epochs, revealed optimum numbers to be quite high - 800 epochs for the model without the embeddings, and 400 epochs for the model with the embeddings. Other hyperparameters were set to default values. When training on the trainlarge, the optimal number of epochs was even bigger: 900 for the model without the embeddings, 1000 for the model with embeddings.
 
@@ -95,78 +95,12 @@ While the optimal number of epochs for trainsmall with embeddings was 400 epochs
 | Tested on | Micro F1 | Macro F1 |
 |:---------:|---------:|----------|
 |    dev    |   0.860       |   0.8603       |
-|    test      |          |         |
+|    test      |   0.8531       |   0.8537      |
 
-## Saved models
+Classification report:
 
-### Trainsmall, no embeddings
+![](results/classification-report-with-embeddings-trainlarge.png)
 
-The model is saved to the Wandb - to load it:
-```
-!pip install wandb
-import wandb
-wandb.login()
+Confusion matrix:
 
-# Initialize Wandb
-run = wandb.init(project="SLED-categorization", entity="tajak", name="testing-trained-model")
-
-# Load the saved model
-artifact = run.use_artifact('tajak/SLED-categorization/SLED-categorization-trainsmall-noembeddings-model:v0', type='model')
-artifact_dir = artifact.download()
-
-model = fasttext.load_model(f"{artifact_dir}/FastText-model-trainsmall-noembeddings.bin")
-```
-
-### Trainsmall, embeddings
-
-The model is saved to the Wandb - to load it:
-```
-!pip install wandb
-import wandb
-wandb.login()
-
-# Initialize Wandb
-run = wandb.init(project="SLED-categorization", entity="tajak", name="testing-trained-model")
-
-# Load the saved model
-artifact = run.use_artifact('tajak/SLED-categorization/SLED-categorization-trainsmall-embeddings-model:v0', type='model')
-artifact_dir = artifact.download()
-
-model = fasttext.load_model(f"{artifact_dir}/FastText-model-trainsmall-embeddings.bin")
-```
-
-### Trainlarge, no embeddings
-
-The model is saved to the Wandb - to load it:
-```
-!pip install wandb
-import wandb
-wandb.login()
-
-# Initialize Wandb
-run = wandb.init(project="SLED-categorization", entity="tajak", name="testing-trained-model")
-
-# Load the saved model
-artifact = run.use_artifact('tajak/SLED-categorization/SLED-categorization-trainlarge-noembeddings-model:v0', type='model')
-artifact_dir = artifact.download()
-
-model = fasttext.load_model(f"{artifact_dir}/FastText-model-trainlarge-noembeddings.bin")
-```
-
-### Trainlarge, embeddings
-
-The model is saved to the Wandb - to load it:
-```
-!pip install wandb
-import wandb
-wandb.login()
-
-# Initialize Wandb
-run = wandb.init(project="SLED-categorization", entity="tajak", name="testing-trained-model")
-
-# Load the saved model
-artifact = run.use_artifact('tajak/SLED-categorization/SLED-categorization-trainsmall-embeddings-model:v0', type='model')
-artifact_dir = artifact.download()
-
-model = fasttext.load_model(f"{artifact_dir}/FastText-model-trainsmall-embeddings.bin")
-```
+![](results/confusion-matrix-on-test-trainlarge-with-embeddings.png)
