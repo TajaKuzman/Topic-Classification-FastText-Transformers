@@ -9,7 +9,7 @@ Content:
 
 For training FastText models, I experimented with both trainsmall and trainlarge (36,032 instances), while for Transformer models, I used the trainsmall train split. The dataset (with the trainsmall) has 12,603 instances, annotated with 13 labels: ['crnakronika', 'druzba', 'gospodarstvo', 'izobrazevanje', 'kultura', 'okolje', 'politika', 'prosticas', 'sport', 'vreme', 'zabava', 'zdravje', 'znanost']. The dataset is more or less balanced.
 
-Analysis revealed that there are 18 duplicated texts (some even in different splits) -> they were discarded. The final dataset that we used consists of 12,585 instances.
+Analysis revealed that there are 18 duplicated texts (some even in different splits) -> they were discarded. The final dataset that I used consists of 12,585 instances.
 
 |               |   label |
 |:--------------|--------:|
@@ -47,6 +47,51 @@ Most of the texts are short - using 512 as max_seq_length will capture most of t
 
 ## Training Transformer models
 
+I used XLM-RoBERTa (base-sized) and SloBERTa model. I performed a hyperparameter search to find the optimum number of epochs. The optimum number of epochs for XLM-RoBERTa was revealed to be 6, and for SloBERTa 8. Other hyperparameter values are the same for both models:
+
+```
+args= {
+    "overwrite_output_dir": True,
+    "num_train_epochs": epoch,
+    "train_batch_size":8,
+    "learning_rate": 1e-5,
+    "labels_list": LABELS,
+    # Change no_save and no_cache to False if you want to save the model:
+    "no_cache": True,
+    "no_save": True,
+    "max_seq_length": 512,
+    "save_steps": -1,
+    "save_model_every_epoch":False,
+    "wandb_project": 'SLED-categorization',
+    "silent": True,
+    }
+```
+
+### Hyperparameter search
+
+First, I trained the models and performed evaluation during training to observe the train and evaluation loss (using the Wandb platform). Then I experimented with the epochs at which the evaluation loss did not start significantly rising yet (epochs 2, 4, 6, 8 for XLM-RoBERTa, and epochs 2, 4, 6, 8, 10 for SloBERTa).
+
+![](results\Hyperparameter-search-wandb-sloberta.jpg)
+
+![](results\Hyperparameter-search-wandb-xlm-roberta.jpg)
+
+
+Results of the hyperparameter search on dev:
+
+XLM-RoBERTa:
+- epoch 2: Macro f1: 0.912, Micro f1: 0.913
+- epoch 4: Macro f1: 0.913, Micro f1: 0.914
+- epoch 6: Macro f1: 0.915, Micro f1: 0.916
+- epoch 8: Macro f1: 0.911, Micro f1: 0.912
+
+SloBERTa:
+- epoch 2: Macro f1: 0.917, Micro f1: 0.917
+- epoch 4: Macro f1: 0.917, Micro f1: 0.917
+- epoch 6: Macro f1: 0.923, Micro f1: 0.924
+- epoch 8: Macro f1: 0.926, Micro f1: 0.927
+- epoch 10: Macro f1: 0.923, Micro f1: 0.924
+
+The optimum number of epochs was revealed to be 6 for XLM-RoBERTa and 8 for SloBERTa.
 
 
 ## Training fastText models
