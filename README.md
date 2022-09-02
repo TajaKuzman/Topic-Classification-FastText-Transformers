@@ -71,9 +71,9 @@ args= {
 
 First, I trained the models and performed evaluation during training to observe the train and evaluation loss (using the Wandb platform). Then I experimented with the epochs at which the evaluation loss did not start significantly rising yet (epochs 2, 4, 6, 8 for XLM-RoBERTa, and epochs 2, 4, 6, 8, 10 for SloBERTa).
 
-![](results\Hyperparameter-search-wandb-sloberta.jpg)
+<img style="width:80%" src="results\Hyperparameter-search-wandb-sloberta.jpg">
 
-![](results\Hyperparameter-search-wandb-xlm-roberta.jpg)
+<img style="width:80%" src="results\Hyperparameter-search-wandb-xlm-roberta.jpg">
 
 
 Results of the hyperparameter search on dev:
