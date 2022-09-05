@@ -5,6 +5,8 @@ Content:
 - [Training Transformer models](#training-transformer-models)
 - [Training fastText models](#training-fasttext-models)
 
+The trained models are saved to the Wandb repository (see *Saved_models.md*).
+
 ## Data
 
 For training FastText models, I experimented with both trainsmall and trainlarge (36,032 instances), while for Transformer models, I used the trainsmall train split. The dataset (with the trainsmall) has 12,603 instances, annotated with 13 labels: ['crnakronika', 'druzba', 'gospodarstvo', 'izobrazevanje', 'kultura', 'okolje', 'politika', 'prosticas', 'sport', 'vreme', 'zabava', 'zdravje', 'znanost']. The dataset is more or less balanced.
@@ -47,7 +49,62 @@ Most of the texts are short - using 512 as max_seq_length will capture most of t
 
 ## Training Transformer models
 
-I used XLM-RoBERTa (base-sized) and SloBERTa model. I performed a hyperparameter search to find the optimum number of epochs. The optimum number of epochs for XLM-RoBERTa was revealed to be 6, and for SloBERTa 8. Other hyperparameter values are the same for both models:
+I used XLM-RoBERTa (base-sized) and SloBERTa model. I performed a hyperparameter search to find the optimum number of epochs. The optimum number of epochs for XLM-RoBERTa was revealed to be 6, and for SloBERTa 8.
+
+Training around 2 hours. Testing took around 10 minutes.
+
+Results for training on the trainsmall:
+
+| Model | Micro F1 | Macro F1 |
+|:---------:|---------:|----------|
+|    SloBERTa      |  0.925     |  0.925   |
+|    XLM-RoBERTa      |       |     |
+|    fastText with embeddings      |  0.85     |  0.85   |
+|    fastText without embeddings      |    0.83      |    0.83      |
+
+
+### SloBERTa
+
+| Tested on | Micro F1 | Macro F1 |
+|:---------:|---------:|----------|
+|    dev    |   0.927       |   0.926       |
+|    test      |   0.925       |  0.925        |
+
+Classification report:
+
+![](results\Classification-report-SloBERTa-trainsmall.jpg)
+
+Confusion matrix:
+
+![](results\Confusion-matrix-SloBERTa-test.png)
+
+
+
+### XLM-RoBERTa
+
+
+| Tested on | Micro F1 | Macro F1 |
+|:---------:|---------:|----------|
+|    dev    |    0.916      |   0.915       |
+|    test      |          |          |
+
+Classification report:
+
+![]()
+
+Confusion matrix:
+
+![]()
+
+### Hyperparameter search
+
+First, I trained the models and performed evaluation during training to observe the train and evaluation loss (using the Wandb platform). Then I experimented with the epochs at which the evaluation loss did not start significantly rising yet (epochs 2, 4, 6, 8 for XLM-RoBERTa, and epochs 2, 4, 6, 8, 10 for SloBERTa).
+
+<img style="width:100%" src="results\Hyperparameter-search-wandb-sloberta.jpg">
+
+<img style="width:100%" src="results\Hyperparameter-search-wandb-xlm-roberta.jpg">
+
+Other hyperparameter values are the same for both models:
 
 ```
 args= {
@@ -67,15 +124,6 @@ args= {
     }
 ```
 
-### Hyperparameter search
-
-First, I trained the models and performed evaluation during training to observe the train and evaluation loss (using the Wandb platform). Then I experimented with the epochs at which the evaluation loss did not start significantly rising yet (epochs 2, 4, 6, 8 for XLM-RoBERTa, and epochs 2, 4, 6, 8, 10 for SloBERTa).
-
-<img style="width:100%" src="results\Hyperparameter-search-wandb-sloberta.jpg">
-
-<img style="width:100%" src="results\Hyperparameter-search-wandb-xlm-roberta.jpg">
-
-
 Results of the hyperparameter search on dev:
 
 XLM-RoBERTa:
@@ -92,7 +140,6 @@ SloBERTa:
 - epoch 10: Macro f1: 0.923, Micro f1: 0.924
 
 The optimum number of epochs was revealed to be 6 for XLM-RoBERTa and 8 for SloBERTa.
-
 
 ## Training fastText models
 
