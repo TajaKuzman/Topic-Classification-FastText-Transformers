@@ -72,11 +72,11 @@ Results for training on the trainsmall:
 
 Classification report:
 
-![](results\Classification-report-SloBERTa-trainsmall.jpg)
+<img style="width:100%" src="results\Classification-report-SloBERTa-trainsmall.jpg)">
 
 Confusion matrix:
 
-![](results\Confusion-matrix-SloBERTa-test.png)
+<img style="width:100%" src="results\Confusion-matrix-SloBERTa-test.png">
 
 
 
