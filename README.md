@@ -11,7 +11,7 @@ The trained models are saved to the Wandb repository (see *Saved_models.md*).
 
 For training FastText models, I experimented with both trainsmall and trainlarge (36,032 instances), while for Transformer models, I used the trainsmall train split. The dataset (with the trainsmall) has 12,603 instances, annotated with 13 labels: ['crnakronika', 'druzba', 'gospodarstvo', 'izobrazevanje', 'kultura', 'okolje', 'politika', 'prosticas', 'sport', 'vreme', 'zabava', 'zdravje', 'znanost']. The dataset is more or less balanced.
 
-Analysis revealed that there are 18 duplicated texts (some even in different splits) -> they were discarded. The final dataset that I used consists of 12,585 instances.
+Analysis performed for training with Transformer models revealed that there are 18 duplicated texts (some even in different splits) -> they were discarded. The final dataset that I used consists of 12,585 instances (the trainsmall dataset).
 
 |               |   label |
 |:--------------|--------:|
@@ -51,17 +51,18 @@ Most of the texts are short - using 512 as max_seq_length will capture most of t
 
 I used XLM-RoBERTa (base-sized) and SloBERTa model. I performed a hyperparameter search to find the optimum number of epochs. The optimum number of epochs for XLM-RoBERTa was revealed to be 6, and for SloBERTa 8.
 
-Training around 2 hours. Testing took around 10 minutes.
+Training took around 2 hours. Testing took around 10 minutes.
 
 Results for training on the trainsmall:
 
 | Model | Micro F1 | Macro F1 |
 |:---------:|---------:|----------|
-|    SloBERTa      |  0.925     |  0.925   |
-|    XLM-RoBERTa      |       |     |
+|    SloBERTa      |  0.93     |  0.93   |
+|    XLM-RoBERTa      | 0.91       |    0.91      |
 |    fastText with embeddings      |  0.85     |  0.85   |
 |    fastText without embeddings      |    0.83      |    0.83      |
 
+SloBERTa is the best performing model, reaching micro and macro F1 scores of 0.93.
 
 ### SloBERTa
 
@@ -72,7 +73,7 @@ Results for training on the trainsmall:
 
 Classification report:
 
-<img style="width:100%" src="results\Classification-report-SloBERTa-trainsmall.jpg)">
+<img style="width:100%" src="results\Classification-report-SloBERTa-trainsmall.jpg">
 
 Confusion matrix:
 
@@ -82,19 +83,17 @@ Confusion matrix:
 
 ### XLM-RoBERTa
 
-
 | Tested on | Micro F1 | Macro F1 |
 |:---------:|---------:|----------|
 |    dev    |    0.916      |   0.915       |
-|    test      |          |          |
+|    test      |   0.906       |    0.905      |
 
 Classification report:
-
-![]()
+<img style="width:100%" src="results\Classification-report-XLM-RoBERTa-trainsmall.jpg">
 
 Confusion matrix:
 
-![]()
+<img style="width:100%" src="results\Confusion-matrix-XLM-RoBERTa-test.png">
 
 ### Hyperparameter search
 

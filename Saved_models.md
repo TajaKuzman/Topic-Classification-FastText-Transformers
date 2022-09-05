@@ -22,6 +22,26 @@ model = ClassificationModel(
     "camembert", artifact_dir)
 ```
 
+### XLM-RoBERTa model (trainsmall)
+
+The model is saved to the Wandb - to load it:
+```
+!pip install wandb
+import wandb
+wandb.login()
+
+# Initialize Wandb
+run = wandb.init(project="SLED-categorization", entity="tajak", name="testing-trained-model")
+
+# Load the saved model
+artifact = run.use_artifact('tajak/SLED-categorization/SLED-XLM-RoBERTa-trainsmall-classifier:v0', type='model')
+artifact_dir = artifact.download()
+
+# Loading a local save
+model = ClassificationModel(
+    "xlmroberta", artifact_dir)
+```
+
 ## FastText models
 
 ### Trainsmall, no embeddings
