@@ -51,7 +51,7 @@ Most of the texts are short - using 512 as max_seq_length will capture most of t
 
 I used XLM-RoBERTa (base-sized) and SloBERTa model. I performed a hyperparameter search to find the optimum number of epochs. The optimum number of epochs for XLM-RoBERTa was revealed to be 6, and for SloBERTa 8.
 
-Training took around 2 hours. Testing took around 10 minutes.
+Training took around 2 hours. Testing took around 10 minutes (for SloBERTa, for XLM-RoBERTa, testing took much longer).
 
 Results for training on the trainsmall:
 
